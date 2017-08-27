@@ -1,0 +1,17 @@
+<h3>Your Orders</h3>
+
+<ul class="list-group">
+  {% for order in orders %}
+  <ul class="list-group-item">
+    <label>Order 1: {{ order.address }}</label>
+
+    {% for lineitem in order.lineitems %}
+    <li class="list-group-item">
+      <span>{{ lineitem.product.name }}</span>
+      <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
+    </li>
+    {% endfor %}
+
+  </ul>
+  {% endfor %}
+</ul>

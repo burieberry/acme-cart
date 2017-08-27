@@ -16,12 +16,16 @@
 </section>
 
 <section class="col-sm-4">
+  {% if lineitems.length %}
   <div>
     {% include "./_cart.html" %}
   </div>
+  {% endif %}
 
+  {% if orders.length %}
   <div>
     {% include "./_orders.html" %}
   </div>
+  {% endif %}
 </section>
 {% endblock %}

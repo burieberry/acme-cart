@@ -25,16 +25,16 @@ module.exports = (Product, LineItem, Order) => {
         l3.setProduct(bazz),
         l3.setOrder(o3)
       ])
-      .then(([l1,, l2,, l3]) => {
-        return Promise.all([
-            o1.getLineitems(),
-            o2.getLineitems(),
-            o3.getLineitems()
-          ])
-          .then(([o1, o2, o3]) => {
-            return o1, o2, o3;
-          })
-      });
+      // .then(([l1,, l2,, l3]) => {
+      //   return Promise.all([
+      //       o1.getLineitems(),
+      //       o2.getLineitems(),
+      //       o3.getLineitems()
+      //     ])
+      //     .then(([o1, o2, o3]) => {
+      //       return o1, o2, o3;
+      //     })
+      // });
     })
     .catch(console.error);
 }

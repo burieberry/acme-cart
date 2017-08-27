@@ -14,7 +14,7 @@
     {% endfor %}
   </ul>
   <hr>
-  <form action="/" method="POST">
+  <form action="/{{ lineitems[0].orderId }}?_method=PUT" method="POST">
     <p>
       <label>Address</label>
       <input type="text" class="form-control" />

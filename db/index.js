@@ -52,9 +52,13 @@ Order.addProductToCart = function(id) {
     })
 };
 
-// Order.updateFromRequestBody = function(id, reqBody) {
-
-// }
+Order.updateFromRequestBody = function(id, reqBody) {
+  return Order.findById(id)
+    .then(order => {
+      order.isCart = false;
+      return order.save();
+    })
+};
 
 
 module.exports = {

@@ -10,6 +10,20 @@ app.engine('html', nunjucks.render);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('method-override')('_method'));
 
+app.get('/', (req, res, next) => {
+  res.send('oh hey there');
+});
+
+app.use((req, res, next) => {
+  const error = new Error('Page not found.');
+  error.status = 404;
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).send({ error: err.message, status: err.status, stack: err.stack } || 'Internal server error.');
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

@@ -3,7 +3,7 @@
 <ul class="list-group">
   {% for order in orders %}
   <ul class="list-group-item">
-    <label>Order 1: {{ order.address }}</label>
+    <label>Order {{ loop.index }}: {{ order.address }}</label>
 
     {% for lineitem in order.lineitems %}
     <li class="list-group-item">

@@ -12,7 +12,7 @@ module.exports = (Product, LineItem, Order) => {
       LineItem.create({ quantity: 1 }),
       LineItem.create({ quantity: 4 }),
       LineItem.create({ quantity: 2 }),
-      Order.create({ address: 'New York', isCart: true }, options),
+      Order.create({ address: 'New York', isCart: false }, options),
       Order.create({ address: 'California', isCart: true }, options),
       Order.create({ address: 'California', isCart: false }, options),
     ])

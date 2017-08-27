@@ -11,9 +11,7 @@ app.use('/', express.static(require('path').join(__dirname, 'node_modules')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('method-override')('_method'));
 
-app.get('/', (req, res, next) => {
-  res.render('index');
-});
+app.get('/', require('./routes/orders'));
 
 app.use((req, res, next) => {
   const error = new Error('Page not found.');
@@ -25,6 +23,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).send({ error: err.message, status: err.status, stack: err.stack } || 'Internal server error.');
 });
 
+const db = require('./db');
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

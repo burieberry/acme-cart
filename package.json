@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "start:dev": "DATABASE_URL=postgres://localhost/acme-cart nodemon server.js"
+    "start:dev": "DATABASE_URL=postgres://localhost/acme_createcart nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,8 @@
     "nodemon": "^1.11.0",
     "nunjucks": "^3.0.1",
     "path": "^0.12.7",
+    "pg": "^7.2.0",
+    "pg-hstore": "^2.3.2",
     "sequelize": "^4.7.5"
   }
 }

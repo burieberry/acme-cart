@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:dev": "DATABASE_URL=postgres://localhost/acme-cart nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
+    "method-override": "^2.3.9",
     "nunjucks": "^3.0.1",
     "path": "^0.12.7",
     "sequelize": "^4.7.5"

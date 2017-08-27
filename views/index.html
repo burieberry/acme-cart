@@ -1,0 +1,58 @@
+{% extends "./layout.html" %}
+
+{% block content %}
+
+<section class="col-sm-8">
+  <h3>Products</h3>
+  <ul class="list-group">
+    <li class="list-group-item">
+      <form action="/orders" method="POST" class="form-group">
+        <span>Item 1</span>
+        <button class="btn btn-sm btn-primary pull-right">Add to Cart</button>
+      </form>
+    </li>
+  </ul>
+</section>
+
+<section class="col-sm-4">
+  <div class="hidden">
+    <h3>Your Cart</h3>
+    <div class="well">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <p>
+            <span>Item 1</span>
+            <span class="label label-default pull-right">1</span>
+          </p>
+          <form action="/orders" method="POST">
+            <button class="btn btn-sm btn-warning">Remove From Cart</button>
+          </form>
+        </li>
+      </ul>
+      <hr>
+      <form action="/orders" method="POST">
+        <p>
+          <label>Address</label>
+          <input type="text" class="form-control" />
+        </p>
+        <button class="btn btn-primary">Place Order</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="hidden">
+    <h3>Your Orders</h3>
+    <ul class="list-group">
+      <ul class="list-group-item">
+        <label>Order 1: New York</label>
+        <li class="list-group-item">
+          <span>Item 1</span>
+          <span class="label label-default pull-right">1</span>
+        </li>
+      </ul>
+    </ul>
+  </div>
+
+</section>
+
+{% endblock %}

@@ -7,11 +7,12 @@ const app = express();
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
+app.use('/', express.static(require('path').join(__dirname, 'node_modules')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('method-override')('_method'));
 
 app.get('/', (req, res, next) => {
-  res.send('oh hey there');
+  res.render('index');
 });
 
 app.use((req, res, next) => {

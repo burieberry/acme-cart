@@ -1,9 +1,27 @@
-const { Order } = require('../db').models;
+// const { Order } = require('../db').models;
 const app = require('express').Router();
 
+const db = require('../db');
+const Product = db.models.Product,
+      Order = db.models.Order,
+      LineItem = db.models.LineItem;
+
 app.get('/', (req, res, next) => {
-  res.render('index');
-});
+  return Promise.all([
+      Product.findAll(),
+      Order.findAll({ where: { isCart: false }}),
+      LineItem.findAll({ include:
+        [{
+          model: Order,
+          where: { isCart: true }
+        }]
+      })
+    ])
+    .then(([products, orders, lineitems]) => {
+      res.render('index', { products, orders, lineitems });
+    })
+    .catch(next);
+})
 
 app.put('/:id', (req, res, next)=> {
   Order.updateFromRequestBody(req.params.id, req.body)

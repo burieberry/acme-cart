@@ -6,9 +6,18 @@ const Product = require('./Product'),
 
 const sync = () => {
   return conn.sync({ force: true });
-}
+};
+
+const seed = () => {
+  return require('./seed')(Product, LineItem, Order);
+};
+
+Order.hasMany(LineItem);
+LineItem.belongsTo(Order);
+LineItem.belongsTo(Product);
 
 module.exports = {
+  seed,
   sync,
   models: {
     Product,

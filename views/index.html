@@ -5,29 +5,33 @@
 <section class="col-sm-8">
   <h3>Products</h3>
   <ul class="list-group">
+    {% for product in products %}
     <li class="list-group-item">
       <form action="/orders" method="POST" class="form-group">
-        <span>Item 1</span>
+        <span>{{ product.name }}</span>
         <button class="btn btn-sm btn-primary pull-right">Add to Cart</button>
       </form>
     </li>
+    {% endfor %}
   </ul>
 </section>
 
 <section class="col-sm-4">
-  <div class="hidden">
+  <div>
     <h3>Your Cart</h3>
     <div class="well">
       <ul class="list-group">
+        {% for lineitem in lineitems %}
         <li class="list-group-item">
           <p>
-            <span>Item 1</span>
-            <span class="label label-default pull-right">1</span>
+            <span>{{ lineitem.product.name }}</span>
+            <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
           </p>
           <form action="/orders" method="POST">
             <button class="btn btn-sm btn-warning">Remove From Cart</button>
           </form>
         </li>
+        {% endfor %}
       </ul>
       <hr>
       <form action="/orders" method="POST">
@@ -40,16 +44,20 @@
     </div>
   </div>
 
-  <div class="hidden">
+  <div>
     <h3>Your Orders</h3>
     <ul class="list-group">
+    {% for order in orders %}
       <ul class="list-group-item">
-        <label>Order 1: New York</label>
+        <label>Order X: {{ order.address }}</label>
+        {% for lineitem in order.lineitems %}
         <li class="list-group-item">
-          <span>Item 1</span>
-          <span class="label label-default pull-right">1</span>
+          <span>{{ lineitem.product.name }}</span>
+          <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
         </li>
+        {% endfor %}
       </ul>
+    {% endfor %}
     </ul>
   </div>
 

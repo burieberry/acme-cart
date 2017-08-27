@@ -6,6 +6,8 @@ const Product = conn.define('product', {
     type: Sequelize.STRING,
     allowNull: false
   }
+}, {
+  timestamps: false
 });
 
 module.exports = Product;

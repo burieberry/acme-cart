@@ -1,4 +1,10 @@
 module.exports = (Product, LineItem, Order) => {
+  const options = {
+    include: [
+      { model: LineItem }
+    ]
+  };
+
   return Promise.all([
       Product.create({ name: 'foo' }),
       Product.create({ name: 'bar' }),
@@ -6,21 +12,29 @@ module.exports = (Product, LineItem, Order) => {
       LineItem.create({ quantity: 1 }),
       LineItem.create({ quantity: 4 }),
       LineItem.create({ quantity: 2 }),
-      Order.create({ address: 'New York', isCart: true }),
-      Order.create({ address: 'California', isCart: true }),
-      Order.create({ address: 'California', isCart: false }),
+      Order.create({ address: 'New York', isCart: true }, options),
+      Order.create({ address: 'California', isCart: true }, options),
+      Order.create({ address: 'California', isCart: false }, options),
     ])
-    .then(([foo, bar, bazz, lineitem1, lineitem2, lineitem3, o1, o2, o3]) => {
+    .then(([foo, bar, bazz, l1, l2, l3, o1, o2, o3]) => {
       return Promise.all([
-        lineitem1.setProduct(foo),
-        lineitem1.setOrder(o1),
-        lineitem2.setProduct(bar),
-        lineitem2.setOrder(o2),
-        lineitem3.setOrder(o3)
+        l1.setProduct(foo),
+        l1.setOrder(o1),
+        l2.setProduct(bar),
+        l2.setOrder(o2),
+        l3.setProduct(bazz),
+        l3.setOrder(o3)
       ])
-        .then(([lineitem1, lineitem2, lineitem3]) => {
-          return lineitem1, lineitem2, lineitem3;
-        });
+      .then(([l1,, l2,, l3]) => {
+        return Promise.all([
+            o1.getLineitems(),
+            o2.getLineitems(),
+            o3.getLineitems()
+          ])
+          .then(([o1, o2, o3]) => {
+            return o1, o2, o3;
+          })
+      });
     })
     .catch(console.error);
 }

@@ -1,7 +1,6 @@
 {% extends "./layout.html" %}
 
 {% block content %}
-
 <section class="col-sm-8">
   <h3>Products</h3>
   <ul class="list-group">
@@ -18,49 +17,11 @@
 
 <section class="col-sm-4">
   <div>
-    <h3>Your Cart</h3>
-    <div class="well">
-      <ul class="list-group">
-        {% for lineitem in lineitems %}
-        <li class="list-group-item">
-          <p>
-            <span>{{ lineitem.product.name }}</span>
-            <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
-          </p>
-          <form action="/orders" method="POST">
-            <button class="btn btn-sm btn-warning">Remove From Cart</button>
-          </form>
-        </li>
-        {% endfor %}
-      </ul>
-      <hr>
-      <form action="/orders" method="POST">
-        <p>
-          <label>Address</label>
-          <input type="text" class="form-control" />
-        </p>
-        <button class="btn btn-primary">Place Order</button>
-      </form>
-    </div>
+    {% include "./_cart.html" %}
   </div>
 
   <div>
-    <h3>Your Orders</h3>
-    <ul class="list-group">
-    {% for order in orders %}
-      <ul class="list-group-item">
-        <label>Order X: {{ order.address }}</label>
-        {% for lineitem in order.lineitems %}
-        <li class="list-group-item">
-          <span>{{ lineitem.product.name }}</span>
-          <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-    {% endfor %}
-    </ul>
+    {% include "./_orders.html" %}
   </div>
-
 </section>
-
 {% endblock %}

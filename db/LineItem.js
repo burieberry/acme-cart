@@ -9,4 +9,18 @@ const LineItem = conn.define('lineitem', {
   timestamps: false
 });
 
+LineItem.findLineItemsList = function() {
+  return LineItem.findAll({
+    where: { quantity: { $gt: 0 } },
+    include: [
+      conn.models.product,
+      {
+        model: conn.models.order,
+        where: { isCart: true }
+      }
+    ]
+  });
+}
+
+
 module.exports = LineItem;

@@ -9,13 +9,8 @@ const Product = db.models.Product,
 app.get('/', (req, res, next) => {
   return Promise.all([
       Product.findAll(),
-      Order.findAll({ where: { isCart: false }}),
-      LineItem.findAll({ include:
-        [{
-          model: Order,
-          where: { isCart: true }
-        }]
-      })
+      Order.findOrderList(),
+      LineItem.findLineItemsList()
     ])
     .then(([products, orders, lineitems]) => {
       res.render('index', { products, orders, lineitems });

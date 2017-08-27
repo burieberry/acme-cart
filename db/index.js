@@ -16,6 +16,47 @@ Order.hasMany(LineItem);
 LineItem.belongsTo(Order);
 LineItem.belongsTo(Product);
 
+Order.addProductToCart = function(id) {
+  return Product.findById(id)
+    .then(product => {
+      return Order.findAll({ where: { isCart: true }})
+        .then(orders => {
+          if (!orders.length) {
+            return Order.create({ isCart: true })
+              .then(order => { return order });
+          }
+          else {
+            orders[0].isCart = true;
+            return orders[0].save();
+          }
+        })
+        .then(order => {
+          return LineItem.findAll({ where: { productId: product.id, orderId: order.id }})
+            .then(lineitem => {
+              if (lineitem.length) {
+                lineitem[0].quantity++;
+                return lineitem[0].save();
+              }
+              else {
+                return LineItem.create({
+                    quantity: 1,
+                    orderId: order.id,
+                    productId: product.id
+                  })
+                  .then(lineitem => {
+                    return lineitem.save();
+                  })
+              }
+          })
+        })
+    })
+};
+
+// Order.updateFromRequestBody = function(id, reqBody) {
+
+// }
+
+
 module.exports = {
   seed,
   sync,

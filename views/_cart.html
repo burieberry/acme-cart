@@ -7,14 +7,14 @@
         <span>{{ lineitem.product.name }}</span>
         <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
       </p>
-      <form action="/orders" method="POST">
+      <form action="/" method="POST">
         <button class="btn btn-sm btn-warning">Remove From Cart</button>
       </form>
     </li>
     {% endfor %}
   </ul>
   <hr>
-  <form action="/orders" method="POST">
+  <form action="/" method="POST">
     <p>
       <label>Address</label>
       <input type="text" class="form-control" />

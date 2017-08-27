@@ -23,15 +23,4 @@ Order.findOrderList = function() {
   })
 }
 
-// Order.addProductToCart = function(id) {
-//   return this.findById(id)
-//     .then(product => {
-//       Order.create({ isCart: true })
-//         .then(order => {
-//           product.orderId = order.id;
-//           return product.save();
-//         })
-//     })
-// };
-
 module.exports = Order;

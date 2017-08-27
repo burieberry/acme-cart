@@ -20,7 +20,11 @@ LineItem.findLineItemsList = function() {
       }
     ]
   });
-}
+};
+
+// LineItem.createNewLineItem = function(id) {
+//   return LineItem.create({ quantity: 1,  })
+// }
 
 
 module.exports = LineItem;

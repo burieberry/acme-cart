@@ -6,7 +6,7 @@
   <ul class="list-group">
     {% for product in products %}
     <li class="list-group-item">
-      <form action="/orders" method="POST" class="form-group">
+      <form action="/{{ product.id }}/lineitems" method="POST" class="form-group">
         <span>{{ product.name }}</span>
         <button class="btn btn-sm btn-primary pull-right">Add to Cart</button>
       </form>

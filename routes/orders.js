@@ -8,13 +8,13 @@ app.get('/', (req, res, next) => {
 app.put('/:id', (req, res, next)=> {
   Order.updateFromRequestBody(req.params.id, req.body)
     .then(() => res.redirect('/'))
-    .catch(ex => {
-      if(ex.message === 'address required'){
-        console.log(ex);
-        return res.render('index', { error: ex });
-      }
-      next(ex);
-    });
+    // .catch(ex => {
+    //   if(ex.message === 'address required'){
+    //     return res.render('index', { error: ex });
+    //   }
+    //   next(ex);
+    // });
+    .catch(next); // note: commented out above, added this
 });
 
 app.post('/:id/lineItems', (req, res, next)=> {

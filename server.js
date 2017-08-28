@@ -20,7 +20,7 @@ app.get('/', (req, res, next) => {
       res.render('index', { products, orders, lineitems });
     })
     .catch(next);
-})
+});
 
 app.use('/orders', require('./routes/orders'));
 

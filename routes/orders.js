@@ -1,6 +1,10 @@
 const { Order } = require('../db').models;
 const app = require('express').Router();
 
+app.get('/', (req, res, next) => {
+  res.redirect('/');
+});
+
 app.put('/:id', (req, res, next)=> {
   Order.updateFromRequestBody(req.params.id, req.body)
     .then(() => res.redirect('/'))

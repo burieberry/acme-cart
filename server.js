@@ -15,11 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('method-override')('_method'));
 
 app.get('/', (req, res, next) => {
-  return Promise.all([
-      Product.findAll(),
-      Order.findOrderList(),
-      LineItem.findLineItemsList()
-    ])
+  Order.findEverything()
     .then(([products, orders, lineitems]) => {
       res.render('index', { products, orders, lineitems });
     })
@@ -35,6 +31,12 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.message === 'address required') {
+    return Order.findEverything()
+      .then(([products, orders, lineitems]) => {
+        res.render('index', { products, orders, lineitems, error: err });
+      })
+  }
   res.status(err.status || 500).send(err.message || 'Internal server error.');
 });
 

@@ -22,7 +22,7 @@
   <form action="/orders/{{ lineitems[0].orderId }}?_method=PUT" method="POST">
     <p>
       <label>Address</label>
-      <input name="address" value="{{ lineitems[0].orderId.address }}" type="text" class="form-control" />
+      <input type="text" name="address" value="{{ lineitems[0].orderId.address }}" class="form-control" />
     </p>
     <button class="btn btn-primary">Place Order</button>
   </form>

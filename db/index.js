@@ -16,6 +16,14 @@ Order.hasMany(LineItem);
 LineItem.belongsTo(Order);
 LineItem.belongsTo(Product);
 
+Order.findEverything = function() {
+  return Promise.all([
+    Product.findAll(),
+    Order.findOrderList(),
+    LineItem.findLineItemsList()
+  ])
+}
+
 Order.addProductToCart = function(id) {
   return Product.findById(id)
     .then(product => {
@@ -31,7 +39,10 @@ Order.addProductToCart = function(id) {
           }
         })
         .then(order => {
-          return LineItem.findAll({ where: { productId: product.id, orderId: order.id }})
+          return LineItem.findAll({ where: {
+              productId: product.id,
+              orderId: order.id
+            }})
             .then(lineitem => {
               if (lineitem.length) {
                 lineitem[0].quantity++;

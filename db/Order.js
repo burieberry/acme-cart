@@ -13,11 +13,11 @@ const Order = conn.define('order', {
   timestamps: false
 });
 
-Order.hook('beforeUpdate', (order) => {
-  if (!order.address) {
-    throw new Error('address required');
-  }
-});
+// Order.hook('beforeUpdate', (order) => {
+//   if (!order.address) {
+//     throw new Error('address required');
+//   }
+// });
 
 Order.findOrderList = function() {
   return Order.findAll({
@@ -30,6 +30,8 @@ Order.findOrderList = function() {
 }
 
 Order.updateFromRequestBody = function(id, reqBody) {
+  if (!reqBody.address) throw new Error('address required');
+
   return Order.findById(id)
     .then(order => {
       order.isCart = false;

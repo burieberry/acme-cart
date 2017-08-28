@@ -40,4 +40,14 @@ Order.updateFromRequestBody = function(id, reqBody) {
     })
 };
 
+Order.destroyLineItem = function(orderId, id) {
+  return this.findById(orderId)
+    .then(order => {
+      return order.getLineitems({ where: { id: id }})
+        .then(lineitems => {
+          return lineitems[0].destroy();
+        })
+    })
+};
+
 module.exports = Order;

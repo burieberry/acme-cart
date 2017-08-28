@@ -12,7 +12,7 @@
         <span>{{ lineitem.product.name }}</span>
         <span class="label label-default pull-right">{{ lineitem.quantity }}</span>
       </p>
-      <form action="/orders/{{ lineitem.id }}?_method=DELETE" method="POST">
+      <form action="/orders/{{ lineitem.orderId }}/lineItems/{{ lineitem.id }}?_method=DELETE" method="POST">
         <button class="btn btn-sm btn-warning">Remove From Cart</button>
       </form>
     </li>

@@ -16,7 +16,7 @@ Order.hasMany(LineItem);
 LineItem.belongsTo(Order);
 LineItem.belongsTo(Product);
 
-Order.findEverything = function() {
+const findEverything = function() {
   return Promise.all([
     Product.findAll(),
     Order.findOrderList(),
@@ -67,6 +67,7 @@ Order.addProductToCart = function(id) {
 module.exports = {
   seed,
   sync,
+  findEverything,
   models: {
     Product,
     Order,

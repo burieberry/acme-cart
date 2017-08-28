@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('method-override')('_method'));
 
 app.get('/', (req, res, next) => {
-  Order.findEverything()
+  db.findEverything()
     .then(([products, orders, lineitems]) => {
       res.render('index', { products, orders, lineitems });
     })
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   if (err.message === 'address required') {
-    return Order.findEverything()
+    return db.findEverything()
       .then(([products, orders, lineitems]) => {
         res.render('index', { products, orders, lineitems, error: err });
       })

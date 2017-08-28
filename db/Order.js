@@ -7,10 +7,16 @@ const Order = conn.define('order', {
     type: Sequelize.BOOLEAN
   },
   address: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING
   }
 }, {
   timestamps: false
+});
+
+Order.hook('beforeUpdate', (order) => {
+  if (!order.address) {
+    throw new Error('address required');
+  }
 });
 
 Order.findOrderList = function() {
@@ -22,5 +28,14 @@ Order.findOrderList = function() {
     }]
   })
 }
+
+Order.updateFromRequestBody = function(id, reqBody) {
+  return Order.findById(id)
+    .then(order => {
+      order.isCart = false;
+      order.address = reqBody.address;
+      return order.save();
+    })
+};
 
 module.exports = Order;

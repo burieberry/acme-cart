@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
 nunjucks.configure('views', { noCache: true });
+
 const db = require('./db');
+const { Product, Order, LineItem } = db.models;
 
 const app = express();
 app.set('view engine', 'html');
@@ -12,17 +14,29 @@ app.use('/', express.static(require('path').join(__dirname, 'node_modules')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('method-override')('_method'));
 
-app.use('/', require('./routes/orders'));
+app.get('/', (req, res, next) => {
+  return Promise.all([
+      Product.findAll(),
+      Order.findOrderList(),
+      LineItem.findLineItemsList()
+    ])
+    .then(([products, orders, lineitems]) => {
+      res.render('index', { products, orders, lineitems });
+    })
+    .catch(next);
+})
 
-// app.use((req, res, next) => {
-//   const error = new Error('Page not found.');
-//   error.status = 404;
-//   next(error);
-// });
+app.use('/orders', require('./routes/orders'));
 
-// app.use((err, req, res, next) => {
-//   res.status(err.status || 500).send({ error: err.message, status: err.status, stack: err.stack } || 'Internal server error.');
-// });
+app.use((req, res, next) => {
+  const error = new Error('Page not found.');
+  error.status = 404;
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).send(err.message || 'Internal server error.');
+});
 
 const port = process.env.PORT || 3000;
 

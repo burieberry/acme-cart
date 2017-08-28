@@ -12,11 +12,11 @@ const Order = conn.define('order', {
   timestamps: false
 });
 
-// Order.hook('beforeUpdate', (order) => {
-//   if (!order.address) {
-//     throw new Error('address required');
-//   }
-// });
+Order.hook('beforeUpdate', (order) => {
+  if (!order.address) {
+    throw new Error('address required');
+  }
+});
 
 Order.addProductToCart = function(id) {
   return conn.models.product.findById(id)
@@ -73,7 +73,8 @@ Order.findOrderList = function() {
 }
 
 Order.updateFromRequestBody = function(id, reqBody) {
-  if (!reqBody.address) throw new Error('address required');
+  // if (!reqBody.address) throw new Error('address required');
+  // (moved to beforeUpdate hook)
 
   return Order.findById(id)
     // move order from cart to submitted orders (only if there's an address)

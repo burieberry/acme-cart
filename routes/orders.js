@@ -9,7 +9,7 @@ app.put('/:id', (req, res, next)=> {
   Order.updateFromRequestBody(req.params.id, req.body)
     .then(() => res.redirect('/'))
     // .catch(ex => {
-    //   if(ex.message === 'address required'){
+    //   if (ex.message === 'address required') {
     //     return res.render('index', { error: ex });
     //   }
     //   next(ex);

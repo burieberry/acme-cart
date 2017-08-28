@@ -13,7 +13,7 @@ module.exports = (Product, LineItem, Order) => {
       LineItem.create({ quantity: 4 }),
       LineItem.create({ quantity: 2 }),
       Order.create({ address: 'New York', isCart: false }, options),
-      Order.create({ address: '', isCart: true }, options),
+      Order.create({ address: null, isCart: true }, options),
       Order.create({ address: 'California', isCart: false }, options),
     ])
     .then(([foo, bar, bazz, l1, l2, l3, o1, o2, o3]) => {

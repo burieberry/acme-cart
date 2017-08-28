@@ -22,28 +22,31 @@ Order.addProductToCart = function(id) {
   return conn.models.product.findById(id)
     // identify product to add to cart
     .then(product => {
-      return Order.findAll({ where: { isCart: true }})
-      // find all orders in the cart
-        .then(orders => {
-          if (!orders.length) {
-            // if no orders in the cart, create new order
+      return Order.findOne({ where: { isCart: true }})
+        // find if there's an order in the cart
+        .then(order => {
+          if (!order) {
+            // if no order in the cart, create new order
             return Order.create({ isCart: true })
               .then(order => { return order });
           }
           // else, return order
-          return orders[0];
+          return order;
         })
         .then(order => {
+          // find if product is already in the cart
           return conn.models.lineitem.findAll({ where: {
               productId: product.id,
               orderId: order.id
             }})
             .then(lineitem => {
+              // if product is in the cart, increment quantity by 1
               if (lineitem.length) {
                 lineitem[0].quantity++;
                 return lineitem[0].save();
               }
               else {
+                // if product not in cart, create new lineitem
                 return conn.models.lineitem.create({
                     quantity: 1,
                     orderId: order.id,
@@ -59,6 +62,7 @@ Order.addProductToCart = function(id) {
 };
 
 Order.findOrderList = function() {
+  // list of submitted orders
   return Order.findAll({
     where: { isCart: false },
     include: [{
@@ -72,6 +76,7 @@ Order.updateFromRequestBody = function(id, reqBody) {
   if (!reqBody.address) throw new Error('address required');
 
   return Order.findById(id)
+    // move order from cart to submitted orders (only if there's an address)
     .then(order => {
       order.isCart = false;
       order.address = reqBody.address;

@@ -20,17 +20,18 @@ const Order = conn.define('order', {
 
 Order.addProductToCart = function(id) {
   return conn.models.product.findById(id)
+    // identify product to add to cart
     .then(product => {
       return Order.findAll({ where: { isCart: true }})
+      // find all orders in the cart
         .then(orders => {
           if (!orders.length) {
+            // if no orders in the cart, create new order
             return Order.create({ isCart: true })
               .then(order => { return order });
           }
-          else {
-            orders[0].isCart = true;
-            return orders[0].save();
-          }
+          // else, return order
+          return orders[0];
         })
         .then(order => {
           return conn.models.lineitem.findAll({ where: {

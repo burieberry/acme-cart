@@ -18,6 +18,14 @@ Order.hook('beforeUpdate', (order) => {
   }
 });
 
+Order.updateFromRequestBody = function(id, reqBody) {
+  return Order.findById(id)
+    .then(order => {
+      Object.assign(order, reqBody);
+      return order.save();
+    })
+};
+
 Order.addProductToCart = function(id) {
   return conn.models.product.findById(id)
     // identify product to add to cart
@@ -72,22 +80,8 @@ Order.findOrderList = function() {
   })
 }
 
-Order.updateFromRequestBody = function(id, reqBody) {
-  return Order.findById(id)
-    .then(order => {
-      Object.assign(order, reqBody);
-      return order.save();
-    })
-};
-
 Order.destroyLineItem = function(orderId, id) {
-  return this.findById(orderId)
-    .then(order => {
-      return order.getLineitems({ where: { id: id }})
-        .then(lineitems => {
-          return lineitems[0].destroy();
-        })
-    })
+  return conn.models.lineitem.destroy({ where: { orderId, id }});
 };
 
 module.exports = Order;

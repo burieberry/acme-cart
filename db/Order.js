@@ -73,14 +73,9 @@ Order.findOrderList = function() {
 }
 
 Order.updateFromRequestBody = function(id, reqBody) {
-  // if (!reqBody.address) throw new Error('address required');
-  // (moved to beforeUpdate hook)
-
   return Order.findById(id)
-    // move order from cart to submitted orders (only if there's an address)
     .then(order => {
-      order.isCart = false;
-      order.address = reqBody.address;
+      Object.assign(order, reqBody);
       return order.save();
     })
 };

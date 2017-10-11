@@ -3,10 +3,9 @@ const conn = require('./conn');
 
 const LineItem = conn.define('lineitem', {
   quantity: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 1
   }
-}, {
-  timestamps: false
 });
 
 LineItem.findLineItemsList = function() {
@@ -21,10 +20,5 @@ LineItem.findLineItemsList = function() {
     ]
   });
 };
-
-// LineItem.createNewLineItem = function(id) {
-//   return LineItem.create({ quantity: 1,  })
-// }
-
 
 module.exports = LineItem;

@@ -3,13 +3,12 @@ const conn = require('./conn');
 
 const Order = conn.define('order', {
   isCart: {
-    type: Sequelize.BOOLEAN
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   },
   address: {
     type: Sequelize.STRING
   }
-}, {
-  timestamps: false
 });
 
 Order.hook('beforeUpdate', (order) => {
@@ -18,47 +17,17 @@ Order.hook('beforeUpdate', (order) => {
   }
 });
 
-Order.addProductToCart = function(id) {
-  return conn.models.product.findById(id)
-    // identify product to add to cart
-    .then(product => {
-      return Order.findOne({ where: { isCart: true }})
-        // find if there's an order in the cart
-        .then(order => {
-          if (!order) {
-            // if no order in the cart, create new order
-            return Order.create({ isCart: true })
-              .then(order => { return order });
-          }
-          // else, return order
-          return order;
-        })
-        .then(order => {
-          // find if product is already in the cart
-          return conn.models.lineitem.findAll({ where: {
-              productId: product.id,
-              orderId: order.id
-            }})
-            .then(lineitem => {
-              // if product is in the cart, increment quantity by 1
-              if (lineitem.length) {
-                lineitem[0].quantity++;
-                return lineitem[0].save();
-              }
-              else {
-                // if product not in cart, create new lineitem
-                return conn.models.lineitem.create({
-                    quantity: 1,
-                    orderId: order.id,
-                    productId: product.id
-                  })
-                  .then(lineitem => {
-                    return lineitem.save();
-                  })
-              }
-          })
-        })
+Order.updateFromRequestBody = function(id, reqBody) {
+  return Order.findById(id)
+    .then(order => {
+      Object.assign(order, reqBody);
+      console.log(order.get())
+      return order.save();
     })
+};
+
+Order.destroyLineItem = function(orderId, id) {
+  return conn.models.lineitem.destroy({ where: { orderId, id }});
 };
 
 Order.findOrderList = function() {
@@ -67,31 +36,49 @@ Order.findOrderList = function() {
     where: { isCart: false },
     include: [{
       model: conn.models.lineitem,
-      include: conn.models.product
+      include: [ conn.models.product ]
     }]
   })
-}
-
-Order.updateFromRequestBody = function(id, reqBody) {
-  // if (!reqBody.address) throw new Error('address required');
-  // (moved to beforeUpdate hook)
-
-  return Order.findById(id)
-    // move order from cart to submitted orders (only if there's an address)
-    .then(order => {
-      order.isCart = false;
-      order.address = reqBody.address;
-      return order.save();
-    })
 };
 
-Order.destroyLineItem = function(orderId, id) {
-  return this.findById(orderId)
+Order.findCart = function() {
+  return Order.findOne({ where: { isCart: true }})
     .then(order => {
-      return order.getLineitems({ where: { id: id }})
-        .then(lineitems => {
-          return lineitems[0].destroy();
-        })
+      if (!order) return Order.create();
+      return order;
+    })
+    .then( order => {
+      return Order.findById(order.id, {
+        include: {
+          model: conn.models.lineitem,
+          include: [ conn.models.product ]
+        }
+      });
+    });
+};
+
+Order.addProductToCart = function(productId) {
+  return this.findCart()
+    .then(order => {
+      // find if product is already in the cart
+      return conn.models.lineitem.findOne({ where: {
+          productId,
+          orderId: order.id
+        }})
+        .then(lineitem => {
+          // if product is in the cart, increment quantity by 1
+          if (lineitem) {
+            lineitem.quantity++;
+            return lineitem.save();
+          }
+          else {
+            // if product not in cart, create new lineitem
+            return conn.models.lineitem.create({
+                orderId: order.id,
+                productId
+              })
+          }
+      })
     })
 };
 

@@ -4,7 +4,6 @@ const nunjucks = require('nunjucks');
 nunjucks.configure('views', { noCache: true });
 
 const db = require('./db');
-const { Product, Order, LineItem } = db.models;
 
 const app = express();
 app.set('view engine', 'html');

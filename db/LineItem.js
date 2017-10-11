@@ -3,7 +3,8 @@ const conn = require('./conn');
 
 const LineItem = conn.define('lineitem', {
   quantity: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 1
   }
 }, {
   timestamps: false

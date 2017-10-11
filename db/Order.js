@@ -50,29 +50,25 @@ Order.findCart = function() {
     })
 };
 
-
 Order.addProductToCart = function(productId) {
   return this.findCart()
     .then(order => {
       // find if product is already in the cart
-      return conn.models.lineitem.findAll({ where: {
+      return conn.models.lineitem.findOne({ where: {
           productId,
           orderId: order.id
         }})
         .then(lineitem => {
           // if product is in the cart, increment quantity by 1
-          if (lineitem.length) {
-            lineitem[0].quantity++;
-            return lineitem[0].save();
+          if (lineitem) {
+            lineitem.quantity++;
+            return lineitem.save();
           }
           else {
             // if product not in cart, create new lineitem
             return conn.models.lineitem.create({
                 orderId: order.id,
                 productId
-              })
-              .then(lineitem => {
-                return lineitem.save();
               })
           }
       })

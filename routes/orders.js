@@ -18,8 +18,8 @@ app.put('/:id', (req, res, next)=> {
 });
 
 app.post('/:id/lineItems', (req, res, next)=> {
-  // note: this was req.body.productId
-  Order.addProductToCart(req.params.id*1)
+  Order.addProductToCart(req.params.id * 1)
+  // Order.addProductToCart(req.body.productId * 1)
     .then(()=> res.redirect('/'))
     .catch(next);
 });

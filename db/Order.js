@@ -9,8 +9,6 @@ const Order = conn.define('order', {
   address: {
     type: Sequelize.STRING
   }
-}, {
-  timestamps: false
 });
 
 Order.hook('beforeUpdate', (order) => {
@@ -23,6 +21,7 @@ Order.updateFromRequestBody = function(id, reqBody) {
   return Order.findById(id)
     .then(order => {
       Object.assign(order, reqBody);
+      console.log(order.get())
       return order.save();
     })
 };
@@ -48,6 +47,14 @@ Order.findCart = function() {
       if (!order) return Order.create();
       return order;
     })
+    .then( order => {
+      return Order.findById(order.id, {
+        include: {
+          model: conn.models.lineitem,
+          include: [ conn.models.product ]
+        }
+      });
+    });
 };
 
 Order.addProductToCart = function(productId) {
